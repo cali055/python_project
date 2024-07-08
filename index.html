@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>Stroke Prediction</title>
+    <style>
+        body {
+            margin: 40px;
+            background-color: #f6f8f9;
+            background-image: linear-gradient(315deg, #f5f7f8 19%, #f5f6f8 85%);
+        }
+
+        .container {
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .btn-container {
+            background: #e1e8ed;
+            box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .head {
+            font-weight: bolder;
+            color: #2648b7 ;
+            font-family: 'Arial', sans-serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #e1e8ed;
+            border-radius: 10px;
+        }
+
+
+        .btn-primary {
+            color: #ffffff;
+            text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+            background-color: #2648b7 !important;
+            border-color: #0a2939 !important;
+            padding: 10px;
+            margin-top: 15px;
+        }
+
+        .form-select, .form-control {
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .prediction {
+            background: #e1e8ed ;
+            color: #2648b7;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+    <!--Font Awesome-->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="head">Stroke Predictor</h1>
+        <div class="btn-container">
+            <!-- Main Input For Receiving Query to our ML -->
+            <form action="{{ url_for('predict')}}" method="post" class="needs-validation" novalidate>
+                <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                        <label for="gender">Gender</label>
+                        <select class="form-select" id="gender" name="gender" required>
+                            <option value="">Choose...</option>
+                            <option value="0">Male</option>
+                            <option value="1">Female</option>
+                            
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a gender.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="age">Age</label>
+                        <input type="number" class="form-control" id="age" name="age" required placeholder="Age" min="1" max="100">
+                        <div class="invalid-feedback">
+                            Please provide a valid age.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="hypertension">Hypertension</label>
+                        <select class="form-select" id="hypertension" name="hypertension" required>
+                            <option value="1" selected>Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an option.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="disease">Heart Disease</label>
+                        <select class="form-select" id="disease" name="disease" required>
+                            <option value="1" selected>Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an option.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="married">Ever Married</label>
+                        <select class="form-select" id="married" name="married" required>
+                            <option value="1" selected>Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an option.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="work">Work Type</label>
+                        <select class="form-select" id="work" name="work" required>
+                            <option value="3" selected>Self-employed</option>
+                            <option value="2">Private</option>
+                            <option value="4">Children</option>
+                            <option value="0">Government Job</option>
+                            <option value="1">Never worked</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an option.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="residence">Residence Type</label>
+                        <select class="form-select" id="residence" name="residence" required>
+                            <option value="1" selected>Urban</option>
+                            <option value="0">Rural</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an option.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="avg_glucose_level">Average Glucose Level</label>
+                        <input type="text" class="form-control" id="avg_glucose_level" name="avg_glucose_level" required placeholder="Average Glucose Level">
+                        <div class="invalid-feedback">
+                            Please provide a valid glucose level.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="bmi">BMI</label>
+                        <input type="text" class="form-control" id="bmi" name="bmi" required placeholder="Body Mass Index (BMI)">
+                        <div class="invalid-feedback">
+                            Please provide a valid BMI.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="smoking">Smoking Status</label>
+                        <select class="form-select" id="smoking" name="smoking" required>
+                            <option value="0">Unknown</option>
+                            <option value="2" selected>Never smoked</option>
+                            <option value="1">Formerly smoked</option>
+                            <option value="3">Smokes</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select an option.
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg">PREDICT</button>
+            </form>
+        </div>
+        <br />
+        <h1 class="prediction">{{prediction_text}}</h1>
+    </div>
+
+    <script>
